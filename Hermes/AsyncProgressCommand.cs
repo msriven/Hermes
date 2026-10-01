@@ -62,7 +62,7 @@ public class AsyncProgressCommand<TProgress> : AsyncCommandBase
         if (!CanExecute()) return;
 
         Progress = default;
-        var reporter = new Progress<TProgress>(value =>
+        var reporter = new OrderedProgress<TProgress>(value =>
         {
             Progress = value;
             ProgressChanged?.Invoke(this, value);
@@ -134,7 +134,7 @@ public class AsyncProgressCommand<TParam, TProgress> : AsyncCommandBase
         if (!CanExecute(parameter)) return;
 
         Progress = default;
-        var reporter = new Progress<TProgress>(value =>
+        var reporter = new OrderedProgress<TProgress>(value =>
         {
             Progress = value;
             ProgressChanged?.Invoke(this, value);
