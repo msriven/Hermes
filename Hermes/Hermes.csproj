@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Remove net8.0-windows if you only need net10: <TargetFramework>net10.0-windows</TargetFramework> -->
+    <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
+    <DebugType>embedded</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- NuGet -->
+    <PackageId>Hermes.Commands</PackageId>
+    <Description>WPF command framework for MVVM: sync/async/throttled/debounced/composite/undoable commands, event binding, source generator.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>wpf;mvvm;command;icommand;async;debounce;throttle;undo</PackageTags>
+
+    <!-- SourceLink (GitHub/Azure DevOps providers are built into the .NET SDK) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true' Or '$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+
+    <!-- Ship the [Command] source generator inside the package -->
+    <ProjectReference Include="..\Hermes.Generators\Hermes.Generators.csproj"
+                      ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <None Include="..\Hermes.Generators\bin\$(Configuration)\netstandard2.0\Hermes.Generators.dll"
+          Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+</Project>
