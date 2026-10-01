@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags: [ 'v*' ]
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Test
+        run: dotnet test Hermes.Tests/Hermes.Tests.csproj -c Release
+
+      - name: Build library
+        run: dotnet build Hermes/Hermes.csproj -c Release -o publish
+
+      - name: Zip
+        shell: pwsh
+        run: Compress-Archive -Path publish/Hermes.dll, publish/Hermes.pdb, README.md -DestinationPath Hermes-${{ github.ref_name }}.zip -ErrorAction SilentlyContinue
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Hermes-${{ github.ref_name }}.zip
+          generate_release_notes: true
