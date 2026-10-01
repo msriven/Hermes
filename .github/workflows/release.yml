@@ -24,7 +24,7 @@ jobs:
 
       - name: Zip
         shell: pwsh
-        run: Compress-Archive -Path publish/Hermes.dll, publish/Hermes.pdb, README.md -DestinationPath Hermes-${{ github.ref_name }}.zip -ErrorAction SilentlyContinue
+        run: Compress-Archive -Path publish/Hermes.dll, README.md -DestinationPath Hermes-${{ github.ref_name }}.zip
 
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
